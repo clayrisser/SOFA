@@ -1,5 +1,5 @@
 {
-  "name": "sofa-api",
+  "name": "@codejamninja/sofa-api",
   "description": "Create REST APIs with GraphQL",
   "version": "0.10.2",
   "buildOptions": {
