@@ -1,5 +1,4 @@
 import {
-  GraphQLField,
   GraphQLNamedType,
   GraphQLObjectType,
   GraphQLOutputType,
