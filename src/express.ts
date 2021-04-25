@@ -4,7 +4,6 @@ import {
   isNonNullType,
   isObjectType,
   print,
-  OperationDefinitionNode,
 } from 'graphql';
 import * as Trouter from 'trouter';
 import { buildOperationNodeForField } from '@graphql-tools/utils';
