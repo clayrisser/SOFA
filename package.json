@@ -1,7 +1,7 @@
 {
   "name": "@codejamninja/sofa-api",
   "description": "Create REST APIs with GraphQL",
-  "version": "0.10.2-1",
+  "version": "0.10.2-2",
   "buildOptions": {
     "input": "./src/index.ts"
   },
