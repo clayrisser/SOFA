@@ -1,16 +1,18 @@
 import {
-  GraphQLSchema,
-  graphql,
-  isObjectType,
-  GraphQLObjectType,
-  getNamedType,
+  GraphQLField,
   GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLOutputType,
+  GraphQLSchema,
+  getNamedType,
+  graphql,
   isListType,
   isNonNullType,
-  GraphQLOutputType,
+  isObjectType,
+  OperationDefinitionNode,
 } from 'graphql';
 
-import { Ignore, ExecuteFn, OnRoute, MethodMap } from './types';
+import { Ignore, ExecuteFn, OnRoute, MethodMap, Method, Kind } from './types';
 import { convertName } from './common';
 import { logger } from './logger';
 import { ErrorHandler } from './express';
@@ -38,6 +40,16 @@ export interface SofaConfig {
    * @example {"Query.field": "GET", "Mutation.field": "POST"}
    */
   method?: MethodMap;
+  calculateMethod?(
+    method: Method,
+    kind: Kind,
+    operationNode: OperationDefinitionNode
+  ): Method;
+  calculatePath?(
+    path: string,
+    kind: Kind,
+    operationNode: OperationDefinitionNode
+  ): string;
 }
 
 export interface Sofa {
@@ -50,6 +62,16 @@ export interface Sofa {
   execute: ExecuteFn;
   onRoute?: OnRoute;
   errorHandler?: ErrorHandler;
+  calculateMethod?(
+    method: Method,
+    kind: Kind,
+    operationNode: OperationDefinitionNode
+  ): Method;
+  calculatePath?(
+    path: string,
+    kind: Kind,
+    operationNode: OperationDefinitionNode
+  ): string;
 }
 
 export function createSofa(config: SofaConfig): Sofa {

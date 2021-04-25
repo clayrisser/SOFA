@@ -1,9 +1,10 @@
 import {
   DocumentNode,
-  print,
-  isObjectType,
-  isNonNullType,
   Kind,
+  isNonNullType,
+  isObjectType,
+  print,
+  OperationDefinitionNode,
 } from 'graphql';
 import * as Trouter from 'trouter';
 import { buildOperationNodeForField } from '@graphql-tools/utils';
@@ -204,14 +205,20 @@ function createQueryRoute({
     isObjectType(fieldType) ||
     (isNonNullType(fieldType) && isObjectType(fieldType.ofType));
   const hasIdArgument = field.args.some((arg) => arg.name === 'id');
-  const path = getPath(fieldName, isSingle && hasIdArgument);
+  let path = getPath(fieldName, isSingle && hasIdArgument);
+  if (sofa.calculatePath) {
+    path = sofa.calculatePath(path, 'query', operationNode);
+  }
 
-  const method = produceMethod({
+  let method = produceMethod({
     typeName: queryType.name,
     fieldName,
     methodMap: sofa.method,
     defaultValue: 'GET',
   });
+  if (sofa.calculateMethod) {
+    method = sofa.calculateMethod(method, 'query', operationNode);
+  }
 
   router[method.toLocaleLowerCase() as TrouterMethod](
     path,
@@ -252,14 +259,20 @@ function createMutationRoute({
     definitions: [operationNode],
   };
   const info = getOperationInfo(operation)!;
-  const path = getPath(fieldName);
+  let path = getPath(fieldName);
+  if (sofa.calculatePath) {
+    path = sofa.calculatePath(path, 'mutation', operationNode);
+  }
 
-  const method = produceMethod({
+  let method = produceMethod({
     typeName: mutationType.name,
     fieldName,
     methodMap: sofa.method,
     defaultValue: 'POST',
   });
+  if (sofa.calculateMethod) {
+    method = sofa.calculateMethod(method, 'mutation', operationNode);
+  }
 
   router[method.toLowerCase() as TrouterMethod](
     path,

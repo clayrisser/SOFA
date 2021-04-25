@@ -16,3 +16,5 @@ export interface RouteInfo {
 export type OnRoute = (info: RouteInfo) => void;
 
 export type MethodMap = Record<string, Method>;
+
+export type Kind = 'mutation' | 'query';
